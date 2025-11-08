@@ -12,12 +12,14 @@ import {
   Settings,
   LogOut,
   Menu,
-  X
+  X,
+  BookOpen
 } from "lucide-react";
 import { useState } from "react";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Home },
+  { name: "Campanhas", href: "/dashboard/campaigns", icon: BookOpen },
   { name: "Certificados", href: "/dashboard/certificates", icon: FileText },
   { name: "IA Generator", href: "/dashboard/ai", icon: Sparkles },
   { name: "Créditos", href: "/dashboard/credits", icon: CreditCard },
