@@ -47,10 +47,20 @@ SUPABASE_SERVICE_ROLE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6...
 # OpenAI
 OPENAI_API_KEY=sk-proj-...
 
+# Stripe (produção)
+STRIPE_SECRET_KEY=sk_live_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+STRIPE_PRICE_STARTER=price_...
+STRIPE_PRICE_BASIC=price_...
+STRIPE_PRICE_PRO=price_...
+STRIPE_PRICE_ULTIMATE=price_...
+
 # App
 NEXT_PUBLIC_APP_URL=https://seu-dominio.vercel.app
 NODE_ENV=production
 ```
+
+**IMPORTANTE**: Para configurar o Stripe corretamente, siga o guia completo em [STRIPE_SETUP.md](./STRIPE_SETUP.md)
 
 ### 4. Deploy
 
@@ -117,6 +127,29 @@ WHERE schemaname = 'public';
 ```
 
 Todas as tabelas devem ter `rowsecurity = true`.
+
+### 5. Verificar Storage Buckets
+
+As migrations criam automaticamente os buckets de storage. Verifique se foram criados:
+
+1. No Supabase Dashboard, vá em **Storage**
+2. Você deve ver 2 buckets:
+   - **avatars**: Para fotos de perfil (5MB max, público)
+   - **certificates**: Para imagens de certificados (10MB max, público)
+3. As políticas RLS já estão configuradas automaticamente
+
+Se os buckets não foram criados, execute manualmente:
+
+```sql
+-- A migration 20250102000001_add_storage_buckets.sql já faz isso
+-- Mas você pode verificar se precisar recriar
+```
+
+**Testar upload:**
+1. Faça login no app
+2. Vá em Configurações
+3. Tente fazer upload de uma foto de perfil
+4. Verifique se a imagem aparece corretamente
 
 ---
 

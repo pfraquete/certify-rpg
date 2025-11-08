@@ -5,16 +5,21 @@ Sistema de certificação e gestão de campanhas de RPG com IA
 ## 📋 Visão Geral
 
 **CertifyRPG** é uma plataforma completa para mestres e jogadores de RPG que permite:
-- 📜 Gerar certificados personalizados de campanhas
-- 🤖 Criar NPCs, itens e histórias com IA
-- 📊 Gerenciar projetos e campanhas
-- 💳 Sistema de créditos e gamificação
+- 📜 Gerar certificados personalizados de campanhas com 3 templates
+- 📥 Exportar certificados em PDF profissional
+- 🤖 Criar NPCs, itens, localizações e histórias com IA (GPT-4)
+- 📊 Gerenciar campanhas e organizar conteúdo
+- 💳 Sistema de créditos com pagamentos via Stripe
+- 🎨 Upload de imagens de perfil e certificados
+- 🏆 Sistema de tiers e gamificação
 
 ## 🚀 Stack Tecnológica
 
-- **Frontend:** Next.js 14 (App Router) + TypeScript + Tailwind CSS
-- **Backend:** Supabase (PostgreSQL + Auth + Storage)
-- **IA:** OpenAI GPT-4 + DALL-E 3
+- **Frontend:** Next.js 16 (App Router) + React 19 + TypeScript 5.9 + Tailwind CSS
+- **Backend:** Supabase (PostgreSQL + Auth + Storage + RLS)
+- **IA:** OpenAI GPT-4
+- **PDF:** @react-pdf/renderer
+- **Pagamentos:** Stripe
 - **Deploy:** Vercel
 - **Monorepo:** Turborepo + pnpm
 
@@ -118,19 +123,63 @@ VERCEL_URL=
 
 ## 📚 Documentação
 
-- [Arquitetura](./docs/architecture.md)
-- [API Reference](./docs/api.md)
-- [Guia de Contribuição](./CONTRIBUTING.md)
+### Guias de Desenvolvimento
+- [Getting Started](./GETTING_STARTED.md) - Setup local e primeiros passos
+- [Contributing](./CONTRIBUTING.md) - Guia de contribuição
+- [Setup Status](./SETUP_STATUS.md) - Status da configuração do projeto
+
+### Guias de Produção
+- [Production Checklist](./PRODUCTION_CHECKLIST.md) - ✅ Checklist completo de deploy
+- [Deployment Guide](./DEPLOYMENT.md) - 🚀 Guia detalhado de deploy
+- [Stripe Setup](./STRIPE_SETUP.md) - 💳 Configuração de pagamentos
 
 ## 🎯 Roadmap
 
+### ✅ Fase 1 - Core (Completo)
 - [x] Setup inicial do projeto
-- [ ] Sistema de autenticação
-- [ ] Dashboard principal
-- [ ] Geração de certificados
-- [ ] Integração com IA
-- [ ] Sistema de créditos
-- [ ] Deploy em produção
+- [x] Sistema de autenticação (Email/Password + OAuth)
+- [x] Dashboard principal
+- [x] Banco de dados com RLS
+- [x] Migrations do Supabase
+
+### ✅ Fase 2 - Features Principais (Completo)
+- [x] Geração de certificados personalizados
+- [x] 3 templates de certificados (Classic, Fantasy, Modern)
+- [x] Export de certificados em PDF
+- [x] Integração com IA (GPT-4)
+- [x] 5 tipos de conteúdo IA (NPC, Item, Location, Story, Quest)
+- [x] Sistema de créditos e transações
+- [x] Tiers de usuário (Bronze, Silver, Gold, Platinum)
+- [x] Gerenciamento de campanhas
+
+### ✅ Fase 3 - Monetização (Completo)
+- [x] Integração com Stripe
+- [x] Checkout de créditos
+- [x] Webhook para confirmação de pagamento
+- [x] 4 pacotes de créditos
+
+### ✅ Fase 4 - Upload e Storage (Completo)
+- [x] Supabase Storage buckets
+- [x] Upload de avatar de usuário
+- [x] Políticas RLS para storage
+- [x] Componente reutilizável de upload
+
+### 🚧 Fase 5 - Melhorias (Próximo)
+- [ ] Preview de certificados antes de gerar PDF
+- [ ] Editor visual de templates
+- [ ] Mais opções de customização (cores, fontes)
+- [ ] Sistema de badges e conquistas
+- [ ] Compartilhamento em redes sociais
+- [ ] Testes unitários e E2E
+- [ ] Internacionalização (i18n)
+
+### 🔮 Fase 6 - Escala (Futuro)
+- [ ] API pública com chaves
+- [ ] Webhooks para integrações
+- [ ] Mobile app (React Native)
+- [ ] Integração com Discord/Roll20
+- [ ] Marketplace de templates
+- [ ] Sistema de afiliados
 
 ## 📄 Licença
 
