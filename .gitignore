@@ -36,3 +36,14 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# Typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# Supabase
+**/supabase/.branches
+**/supabase/.temp
+
+# Logs
+.pnpm-debug.log*

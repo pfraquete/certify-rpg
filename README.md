@@ -1,135 +1,149 @@
-# Turborepo starter
+# 🎲 CertifyRPG
 
-This Turborepo starter is maintained by the Turborepo core team.
+Sistema de certificação e gestão de campanhas de RPG com IA
 
-## Using this example
+## 📋 Visão Geral
 
-Run the following command:
+**CertifyRPG** é uma plataforma completa para mestres e jogadores de RPG que permite:
+- 📜 Gerar certificados personalizados de campanhas
+- 🤖 Criar NPCs, itens e histórias com IA
+- 📊 Gerenciar projetos e campanhas
+- 💳 Sistema de créditos e gamificação
 
-```sh
-npx create-turbo@latest
-```
+## 🚀 Stack Tecnológica
 
-## What's inside?
+- **Frontend:** Next.js 14 (App Router) + TypeScript + Tailwind CSS
+- **Backend:** Supabase (PostgreSQL + Auth + Storage)
+- **IA:** OpenAI GPT-4 + DALL-E 3
+- **Deploy:** Vercel
+- **Monorepo:** Turborepo + pnpm
 
-This Turborepo includes the following packages/apps:
-
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+## 📁 Estrutura do Projeto
 
 ```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+certify-rpg/
+├── apps/
+│   ├── web/              # Next.js frontend
+│   ├── api/              # API services
+│   ├── ai-service/       # Serviço de IA
+│   └── pdf-service/      # Geração de PDFs
+├── packages/
+│   ├── ui/               # Componentes compartilhados
+│   ├── database/         # Schema e queries do Supabase
+│   ├── core/             # Lógica de negócio
+│   ├── types/            # TypeScript types
+│   └── config/           # Configurações compartilhadas
+└── supabase/             # Migrations e functions
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+## 🛠️ Setup do Ambiente
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
+### Pré-requisitos
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
+- Node.js 18+
+- pnpm 8+
+- Conta no Supabase
+- Conta no Vercel
+- API Key da OpenAI
 
-### Develop
+### Instalação
 
-To develop all apps and packages, run the following command:
+```bash
+# 1. Clonar repositório
+git clone https://github.com/pfraquete/certify-rpg.git
+cd certify-rpg
 
-```
-cd my-turborepo
+# 2. Instalar dependências
+pnpm install
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
+# 3. Configurar variáveis de ambiente
+cp apps/web/.env.example apps/web/.env.local
+# Editar .env.local com suas credenciais
 
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
-```
+# 4. Inicializar Supabase
+cd apps/web
+supabase init
+supabase start
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+# 5. Rodar migrações
+supabase db push
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+# 6. Iniciar desenvolvimento
+pnpm dev
 ```
 
-### Remote Caching
+## 📦 Comandos Disponíveis
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+```bash
+# Desenvolvimento
+pnpm dev              # Iniciar todos os apps
+pnpm dev:web          # Iniciar apenas web
+pnpm dev:api          # Iniciar apenas API
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+# Build e Deploy
+pnpm build            # Build de produção
+pnpm start            # Iniciar produção local
+pnpm deploy           # Deploy para Vercel
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
+# Testes
+pnpm test             # Rodar testes unitários
+pnpm e2e              # Rodar testes E2E
+pnpm test:watch       # Testes em modo watch
 
-```
-cd my-turborepo
+# Banco de dados
+pnpm db:migrate       # Rodar migrações
+pnpm db:seed          # Popular banco
+pnpm db:reset         # Reset completo
 
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
-```
-
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+# Utilidades
+pnpm lint             # Verificar linting
+pnpm format           # Formatar código
+pnpm type-check       # Verificar tipos
 ```
 
-## Useful Links
+## 🔐 Variáveis de Ambiente
 
-Learn more about the power of Turborepo:
+```env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+# OpenAI
+OPENAI_API_KEY=
+
+# Vercel (opcional para desenvolvimento)
+VERCEL_URL=
+```
+
+## 📚 Documentação
+
+- [Arquitetura](./docs/architecture.md)
+- [API Reference](./docs/api.md)
+- [Guia de Contribuição](./CONTRIBUTING.md)
+
+## 🎯 Roadmap
+
+- [x] Setup inicial do projeto
+- [ ] Sistema de autenticação
+- [ ] Dashboard principal
+- [ ] Geração de certificados
+- [ ] Integração com IA
+- [ ] Sistema de créditos
+- [ ] Deploy em produção
+
+## 📄 Licença
+
+MIT License - veja [LICENSE](./LICENSE) para mais detalhes.
+
+## 👥 Contribuindo
+
+Contribuições são bem-vindas! Por favor, leia o [guia de contribuição](./CONTRIBUTING.md) antes de submeter PRs.
+
+## 📧 Contato
+
+Para dúvidas ou sugestões, abra uma issue no GitHub.
+
+---
+
+Feito com ❤️ para a comunidade de RPG
