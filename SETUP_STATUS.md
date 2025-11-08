@@ -159,3 +159,30 @@ npx supabase db push  # Aplicar migrações
 ---
 
 **Observação:** O setup básico está completo e o projeto está pronto para desenvolvimento. A configuração do Supabase foi deixada para depois conforme solicitado.
+
+---
+
+## 🔄 Atualização - 07/11/2025
+
+### ✅ Supabase Configurado
+
+#### Credenciais Configuradas
+- [x] Projeto Supabase linkado: `bbssiqvvfxeqbqnxrrwb`
+- [x] Arquivo `.env.local` criado com credenciais
+- [x] URL do Supabase: `https://bbssiqvvfxeqbqnxrrwb.supabase.co`
+- [x] Chaves configuradas (ANON_KEY e SERVICE_ROLE_KEY)
+
+#### Banco de Dados
+- [x] Migração inicial aplicada: `20250101000000_initial_schema.sql`
+- [x] Extensões instaladas: uuid-ossp, vector, pg_cron
+- [x] Tabela `profiles` criada com RLS
+- [x] Trigger automático para novos usuários configurado
+- [x] Conexão testada e validada
+
+#### Testes
+- [x] Script de teste de conexão criado
+- [x] Script de verificação de schema criado
+- [x] Políticas RLS validadas
+
+**Próximo passo:** Implementar sistema de autenticação (login/registro)
+
