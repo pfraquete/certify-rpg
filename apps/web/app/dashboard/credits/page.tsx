@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useCredits } from "@/lib/hooks/use-credits";
@@ -7,11 +8,44 @@ import { CREDIT_PACKAGES, TIER_BENEFITS } from "@/lib/credits";
 import { Coins, TrendingUp, History, Crown, Zap } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { toast } from "sonner";
 
 export default function CreditsPage() {
   const { credits, tier, loading, transactions } = useCredits();
+  const [purchasing, setPurchasing] = useState(false);
 
   const tierInfo = TIER_BENEFITS[tier as keyof typeof TIER_BENEFITS] || TIER_BENEFITS.bronze;
+
+  const handlePurchase = async (packageIndex: number) => {
+    setPurchasing(true);
+    try {
+      // Map package index to product key
+      const productKeys = ["STARTER_PACK", "BASIC_PACK", "PRO_PACK", "ULTIMATE_PACK"];
+      const productKey = productKeys[packageIndex];
+
+      const response = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ productKey }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to create checkout session");
+      }
+
+      const { url } = await response.json();
+
+      if (url) {
+        window.location.href = url;
+      }
+    } catch (error) {
+      console.error("Error creating checkout:", error);
+      toast.error("Erro ao processar pagamento");
+      setPurchasing(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -117,8 +151,12 @@ export default function CreditsPage() {
                     </p>
                   )}
                 </div>
-                <Button className="w-full" disabled>
-                  Em breve
+                <Button
+                  className="w-full"
+                  onClick={() => handlePurchase(index)}
+                  disabled={purchasing}
+                >
+                  {purchasing ? "Processando..." : "Comprar"}
                 </Button>
               </CardContent>
             </Card>

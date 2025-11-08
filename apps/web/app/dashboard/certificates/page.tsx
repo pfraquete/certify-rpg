@@ -54,6 +54,35 @@ export default function CertificatesPage() {
     }
   };
 
+  const handleDownloadPDF = async (id: string, playerName: string) => {
+    try {
+      toast.loading("Gerando PDF...");
+
+      const response = await fetch(`/api/certificates/${id}/pdf`);
+
+      if (!response.ok) {
+        throw new Error("Failed to generate PDF");
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `certificado-${playerName.replace(/\s+/g, "-").toLowerCase()}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+
+      toast.dismiss();
+      toast.success("PDF baixado com sucesso!");
+    } catch (error) {
+      console.error("Error downloading PDF:", error);
+      toast.dismiss();
+      toast.error("Erro ao baixar PDF");
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -171,7 +200,14 @@ export default function CertificatesPage() {
                     </p>
                   )}
                   <div className="flex gap-2 pt-3">
-                    <Button variant="outline" size="sm" className="flex-1" disabled>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1"
+                      onClick={() =>
+                        handleDownloadPDF(certificate.id, certificate.player_name)
+                      }
+                    >
                       <Download className="h-4 w-4 mr-1" />
                       PDF
                     </Button>

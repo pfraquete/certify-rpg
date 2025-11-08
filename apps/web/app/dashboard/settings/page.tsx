@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth/context";
 import { useCredits } from "@/lib/hooks/use-credits";
 import { createClient } from "@/lib/supabase/client";
@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ImageUpload } from "@/components/ui/image-upload";
 import { toast } from "sonner";
 import { User, CreditCard, Shield, Key } from "lucide-react";
 import { TIER_BENEFITS } from "@/lib/credits";
@@ -19,9 +20,46 @@ export default function SettingsPage() {
   const [fullName, setFullName] = useState(
     user?.user_metadata?.full_name || ""
   );
+  const [avatarUrl, setAvatarUrl] = useState<string>("");
   const supabase = createClient();
 
   const tierInfo = TIER_BENEFITS[tier as keyof typeof TIER_BENEFITS] || TIER_BENEFITS.bronze;
+
+  useEffect(() => {
+    if (!user) return;
+
+    const loadProfile = async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("avatar_url")
+        .eq("id", user.id)
+        .single();
+
+      if (data?.avatar_url) {
+        setAvatarUrl(data.avatar_url);
+      }
+    };
+
+    loadProfile();
+  }, [user, supabase]);
+
+  const handleAvatarUpload = async (url: string) => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from("profiles")
+        .update({ avatar_url: url })
+        .eq("id", user.id);
+
+      if (error) throw error;
+
+      setAvatarUrl(url);
+    } catch (error) {
+      console.error(error);
+      toast.error("Erro ao atualizar avatar");
+    }
+  };
 
   const handleUpdateProfile = async () => {
     if (!user) return;
@@ -65,6 +103,22 @@ export default function SettingsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <div>
+            <Label>Foto de Perfil</Label>
+            <div className="mt-2">
+              {user && (
+                <ImageUpload
+                  bucket="avatars"
+                  userId={user.id}
+                  currentImageUrl={avatarUrl}
+                  onUploadComplete={handleAvatarUpload}
+                  maxSizeMB={5}
+                  label="Escolher Foto"
+                />
+              )}
+            </div>
+          </div>
+
           <div>
             <Label htmlFor="email">Email</Label>
             <Input

@@ -221,6 +221,24 @@ export default function NewCertificatePage() {
             </FormField>
 
             <FormField>
+              <Label htmlFor="template" required>
+                Template do Certificado
+              </Label>
+              <select
+                id="template"
+                className="flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                {...form.register("template")}
+              >
+                <option value="classic">Clássico - Design tradicional elegante</option>
+                <option value="fantasy">Fantasia - Estilo medieval e épico</option>
+                <option value="modern">Moderno - Design limpo e profissional</option>
+              </select>
+              <p className="text-xs text-neutral-500 mt-1">
+                Escolha o estilo visual do seu certificado
+              </p>
+            </FormField>
+
+            <FormField>
               <div className="flex items-center gap-2">
                 <input
                   id="isPublic"
