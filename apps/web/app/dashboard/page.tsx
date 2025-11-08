@@ -1,6 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth/context";
+import { useCredits } from "@/lib/hooks/use-credits";
+import { createClient } from "@/lib/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { FileText, Sparkles, CreditCard, TrendingUp } from "lucide-react";
@@ -8,35 +11,68 @@ import Link from "next/link";
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const { credits, tier } = useCredits();
+  const [stats, setStats] = useState({
+    certificates: 0,
+    aiGenerations: 0,
+  });
+  const [loading, setLoading] = useState(true);
 
-  const stats = [
+  const supabase = createClient();
+
+  useEffect(() => {
+    if (!user) return;
+
+    const loadStats = async () => {
+      const [certificatesResult, aiGenResult] = await Promise.all([
+        supabase
+          .from("certificates")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user.id),
+        supabase
+          .from("ai_generations")
+          .select("id", { count: "exact", head: true })
+          .eq("user_id", user.id),
+      ]);
+
+      setStats({
+        certificates: certificatesResult.count || 0,
+        aiGenerations: aiGenResult.count || 0,
+      });
+      setLoading(false);
+    };
+
+    loadStats();
+  }, [user, supabase]);
+
+  const statCards = [
     {
       title: "Certificados",
-      value: "0",
+      value: loading ? "..." : stats.certificates.toString(),
       description: "Certificados criados",
       icon: FileText,
       href: "/dashboard/certificates",
     },
     {
       title: "IA Gerações",
-      value: "0",
+      value: loading ? "..." : stats.aiGenerations.toString(),
       description: "Conteúdos gerados",
       icon: Sparkles,
       href: "/dashboard/ai",
     },
     {
       title: "Créditos",
-      value: "0",
+      value: loading ? "..." : credits.toString(),
       description: "Créditos disponíveis",
       icon: CreditCard,
       href: "/dashboard/credits",
     },
     {
       title: "Tier",
-      value: "Bronze",
+      value: loading ? "..." : tier.charAt(0).toUpperCase() + tier.slice(1),
       description: "Seu nível atual",
       icon: TrendingUp,
-      href: "/dashboard/settings",
+      href: "/dashboard/credits",
     },
   ];
 
@@ -54,7 +90,7 @@ export default function DashboardPage() {
 
       {/* Stats grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat) => {
+        {statCards.map((stat) => {
           const Icon = stat.icon;
           return (
             <Card key={stat.title} className="hover:shadow-lg transition-shadow">
